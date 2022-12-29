@@ -537,10 +537,11 @@ DotObject.prototype.dot = function (obj, tgt, path, opts = {}) {
           return this.dot(
             obj[key],
             tgt,
-            path.slice(0, -1).concat(previousKey + index)
+            path.slice(0, -1).concat(previousKey + index),
+            opts
           )
         } else {
-          return this.dot(obj[key], tgt, path.concat(index))
+          return this.dot(obj[key], tgt, path.concat(index), opts)
         }
       } else {
         if (isArray && this.useBrackets) {
