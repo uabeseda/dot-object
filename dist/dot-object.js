@@ -516,8 +516,9 @@
      * @param {Object} obj source object
      * @param {Object} tgt target object
      * @param {Array} path path array (internal)
+     * @param opts
      */
-    DotObject.prototype.dot = function(obj, tgt, path) {
+    DotObject.prototype.dot = function(obj, tgt, path, opts = {}) {
         tgt = tgt || {}
         path = path || []
         var isArray = Array.isArray(obj)
@@ -525,7 +526,12 @@
         Object.keys(obj).forEach(
             function(key) {
                 var index = isArray && this.useBrackets ? '[' + key + ']' : key
+                let isSkipObj = false
+                if (isObject(obj[key])) {
+                    isSkipObj = Array.isArray(opts?.skip) && opts.skip.includes(obj[key].constructor.name)
+                }
                 if (
+                    !isSkipObj &&
                     isArrayOrObject(obj[key]) &&
                     ((isObject(obj[key]) && !isEmptyObject(obj[key])) ||
                         (Array.isArray(obj[key]) && !this.keepArray && obj[key].length !== 0))

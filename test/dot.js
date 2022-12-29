@@ -152,4 +152,25 @@ describe('dot():', function () {
     Dot.dot({ hello: {} }).should.eql({ hello: {} })
     Dot.dot({ hello: { world: {} } }).should.eql({ 'hello.world': {} })
   })
+
+  it('Skip objects', function () {
+    class Test1 {
+      constructor (t1, t2) {
+        this.t1 = t1
+        this.t2 = t2
+      }
+    }
+    class Test2 {
+      constructor (t1, t2) {
+        this.t1 = t1
+        this.t2 = t2
+      }
+    }
+
+    const t1 = new Test1('1', '2')
+    const t2 = new Test2('1', '2')
+    const dot = Dot.dot({ test1: t1, test2: t2 }, null, null, { skip: ['Test1'] })
+
+    dot.should.eql({ test1: new Test1('1', '2'), 'test2.t1': '1', 'test2.t2': '2' })
+  })
 })
